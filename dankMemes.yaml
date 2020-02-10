@@ -1,0 +1,230 @@
+swagger: '2.0'
+info:
+  title: Dank-Memes API
+  description: Discover your next favorite meme
+  version: 1.0.0
+# host: api.sunglasses-io.com
+schemes:
+  - https
+# basePath: /api
+produces:
+  - application/json
+paths:
+  /memes:
+    get:
+      tags:
+        - Memes
+      summary: Get all dank memes
+      description: |
+        The /memes endpoint gets all of the memes that are currently available
+      parameters:
+        - in: query
+          name: meme_title
+          type: string
+          description: |
+            Searches memes by title (optional)
+      responses:
+        '200':
+          description: An array of memes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Meme'
+        '404':
+          description: No memes found
+  /memes/top:
+    get:
+      tags:
+        - Memes
+      summary: Get the most popular memes 
+      description: |
+        Gets the most popular memes in ascending order (likes)
+      responses:
+        '200':
+          description: An array of memes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Meme'        
+  /memes/{memeId}/categories:
+    get:
+      tags:
+        - Memes
+      summary: Get the categories for a meme
+      description: |
+        Get categories for a meme
+      parameters: 
+        - name: memeId
+          in: path
+          description: Meme id
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An array of categories for a meme
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Category'
+        '404':
+          description: No categories found
+          schema:
+            $ref: '#/definitions/Error'
+  /memes/{language}:
+    get:
+      tags:
+        - Memes
+      summary: Get memes by language type
+      description: |
+        Get memes by language
+      parameters: 
+        - language:
+          in: path
+          description: meme language
+          required: true
+          type: string
+      responses:
+        '200':
+          description: An array of memes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Meme'    
+  /create-meme:
+    post:
+      tags:
+        - Memes
+      summary: Create a meme
+      description: |
+        Create a meme of your choice
+      consumes: 
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: |
+            meme to be created
+          required: true
+          schema:
+            type: object
+            properties:
+                title:
+                  type: string
+                imageUrl:
+                  type: string
+                memeCaption:
+                  type: string
+                genres:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Success message
+  /update-meme/{memeId}:
+    post:
+      tags:
+        - Memes
+      summary: Update a meme by id
+      description: |
+        Update meme by Id
+      parameters:
+        - in: body
+          name: body
+          description: |
+            meme to be created
+          required: true
+          schema:
+            type: object
+            properties:
+                title:
+                  type: string
+                imageUrl:
+                  type: string
+                memeCaption:
+                  type: string
+                genres:
+                  type: array
+                  items:
+                    type: string
+        - name: memeId
+          in: path
+          type: string
+          required: true
+          description: Meme id
+      responses:
+        '200':
+          description: Success message        
+  /delete-meme/{memeId}:
+    delete:
+      tags: 
+        - Memes
+      summary: Delete meme by id
+      description: | 
+        Deletes a meme from the database
+      parameters:
+      - name: memeId
+        in: path
+        type: string
+        required: true
+        description: Meme id
+      responses:
+        '200':
+          description: Successfully removed meme
+          schema:
+            type: object
+            properties:
+              product:
+                $ref: '#/definitions/Meme'
+        '404': 
+          description: Meme not found
+          schema:
+            $ref: '#/definitions/Error'        
+definitions:
+  Meme:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique identifier for a dank meme.
+      title:
+        type: string
+        description: Meme title
+      imgUrl:
+        type: string
+        description: Url string for meme image
+      memeCaption:
+        type: string
+        description: Meme caption
+      categories:
+        type: array
+        description: An array of strings representing the category type
+        items:
+          description: Category type
+          type: string
+      language:
+        type: string
+        description: meme language
+      likes:
+       type: integer
+       description: Number of likes for a meme
+  Category:
+    type: object
+    properties:
+      title:
+        type: string 
+        description: Category title
+      id:
+       type: string
+       description: Unique identifier for a category
+  Error:
+    type: object
+    properties:
+      message: 
+        type: string
+        description: error message
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /AndresXI/Memes-Api/1.0.0
