@@ -3,7 +3,6 @@ info:
   title: Dank-Memes API
   description: Discover your next favorite meme
   version: 1.0.0
-# host: api.sunglasses-io.com
 schemes:
   - https
 # basePath: /api
